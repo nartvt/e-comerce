@@ -1,4 +1,15 @@
-### Donut commit
+promotion-service
+    + port: 8000
+
+auth-service
+    + port: 9000
 
 
-### nartvt commit
+product-service:
+    + port: 6000
+
+elasticsearch-service:
+    + port: 7000
+
+api-gateway:
+    + port: 5000
