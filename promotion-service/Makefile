@@ -26,7 +26,7 @@ grpc_model_move:
 grpc_rpc:
 	@echo "Generate proto rpc: "
 	@$(foreach dir,$(PROTOBUF_RPC), \
-		protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative $(dir) && echo "Generate $(dir) ===> success !" ; \
+		protoc --go_out=app/protogen/rpc --go-grpc_out=app/protogen/rpc --go_opt=paths=source_relative $(dir) && echo "Generate $(dir) ===> success !" ; \
 	)
 
 grpc_rpc_move:

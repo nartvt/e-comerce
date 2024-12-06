@@ -1,46 +1,80 @@
 syntax = "proto3";
 
 package promotion.message;
-option go_package = "promotion-service/app/proto-gen/message";
 
-message Active {
-  bool active = 1;
-};
+option go_package = "promotion-service/app/protogen/message";
 
-message PromotionRequest {
+message Promotion {
   int64   id        = 1;
-  string  name      = 2;
-  float   price     = 3;
-  string  image     = 4;
-  Active  active    = 5;
+  string  code      = 2;
+  string promotionType = 3;
+  int64   value     = 4;
+  int64 createdBy = 5;
   int64   createdAt = 6;
   int64   updatedAt = 7;
   int64   deletedAt = 8;
-  int32   limit     = 9;
-  int32   offset    = 10;
+  int64 activeFrom = 9;
+  int64 activeTo = 10;
+  int64 dailyActiveFrom = 11;
+  int64 dailyActiveTo = 12;
+  int32 maxActiveTime = 13;
+  int32 maxDailyActiveTime = 14;
+  int32 perUserActiveTime = 15;
+  int32 perUserDailyActiveTime = 16;
+  bool active = 17;
 }
 
-message PromotionResponse {
-  int64   id                      = 1;
-  string  code                    = 2;
-  string  promotionType           = 3;
-  float   value                   = 4;
-  string  image                   = 5;
-  Active  active                  = 6;
-  int32   createdBy               = 7;
-  int64   createdAt               = 8;
-  int64   updatedAt               = 9;
-  int64   deletedAt               = 10;
-  int64   activeFrom              = 11;
-  int64   activeTo                = 12;
-  int64   dailyActiveFrom         = 13;
-  int32   dailyActiveTo           = 14;
-  int32   maxActiveTime           = 15;
-  int32   maxDailyActiveTime      = 16;
-  int32   perUserActiveTime       = 17;
-  int32   perUserDailyActiveTime  = 18;
+message CreatePromotionRequest {
+  string  code      = 1;
+  string promotionType = 2;
+  int64   value     = 3;
+  int64 createdBy = 4;
+  int64   createdAt = 5;
+  int64   updatedAt = 6;
+  int64   deletedAt = 7;
+  int64 activeFrom = 8;
+  int64 activeTo = 9;
+  int64 dailyActiveFrom = 10;
+  int64 dailyActiveTo = 11;
+  int32 maxActiveTime = 12;
+  int32 maxDailyActiveTime = 13;
+  int32 perUserActiveTime = 14;
+  int32 perUserDailyActiveTime = 15;
+  bool active = 16;
 }
 
-message PromotionResponses {
-  repeated PromotionResponse promotionResponses = 1;
+message CreatePromotionResponse {
+  Promotion promotion = 1;
+}
+
+message GetPromotionByIdRequest {
+  int64 id = 1;
+}
+
+message GetPromotionByIdResponse {
+  Promotion promotion = 1;
+}
+
+message UpdatePromotionRequest {
+  int64 id = 1;
+  string  code      = 2;
+  string promotionType = 3;
+  int64   value     = 4;
+  int64 createdBy = 5;
+  int64   createdAt = 6;
+  int64   updatedAt = 7;
+  int64   deletedAt = 8;
+  int64 activeFrom = 9;
+  int64 activeTo = 10;
+  int64 dailyActiveFrom = 11;
+  int64 dailyActiveTo = 12;
+  int32 maxActiveTime = 13;
+  int32 maxDailyActiveTime = 14;
+  int32 perUserActiveTime = 15;
+  int32 perUserDailyActiveTime = 16;
+  bool active = 17;
+}
+
+message UpdatePromotionResponse {
+  Promotion promotion = 1;
 }
