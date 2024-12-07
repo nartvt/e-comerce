@@ -10,4 +10,5 @@ service PromotionService {
   rpc GetPromotionById(promotion.message.GetPromotionByIdRequest) returns (promotion.message.GetPromotionByIdResponse){};
   rpc CreatePromotion(promotion.message.CreatePromotionRequest) returns (promotion.message.CreatePromotionResponse){};
   rpc UpdatePromotion(promotion.message.UpdatePromotionRequest) returns (promotion.message.UpdatePromotionResponse){};
+  rpc GetPromotionsPagination(promotion.message.GetPromotionsPaginationRequest) returns (promotion.message.GetPromotionsPaginationResponse){};
 }

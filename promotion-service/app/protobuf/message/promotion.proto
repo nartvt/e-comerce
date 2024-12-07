@@ -44,7 +44,6 @@ message CreatePromotionRequest {
 }
 
 message CreatePromotionResponse {
-  Promotion promotion = 1;
 }
 
 message GetPromotionByIdRequest {
@@ -76,5 +75,14 @@ message UpdatePromotionRequest {
 }
 
 message UpdatePromotionResponse {
-  Promotion promotion = 1;
+}
+
+message GetPromotionsPaginationRequest {
+  bool isActive = 1;
+  int32 offset = 2;
+  int32 limit = 3;
+}
+
+message GetPromotionsPaginationResponse {
+  repeated Promotion promotions = 1;
 }

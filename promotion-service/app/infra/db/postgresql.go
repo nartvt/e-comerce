@@ -11,9 +11,9 @@ import (
 	"promotion-service/app/config"
 )
 
-var postgresDB *gorm.DB
+var instance *gorm.DB
 
-func InitPostgres() {
+func InitDB() {
 	conf := config.Config
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s",
 		conf.Postgres.UserName,
@@ -24,21 +24,23 @@ func InitPostgres() {
 	)
 
 	var err error
-	postgresDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+	instance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		panic(err)
 	}
 }
-func DB() *gorm.DB {
-	if postgresDB == nil {
-		InitPostgres()
+
+func GetDB() *gorm.DB {
+	if instance == nil {
+		InitDB()
 	}
-	return postgresDB
+	return instance
 }
-func ClosePostgres() {
-	if db, _ := postgresDB.DB(); db != nil {
+
+func CloseDB() {
+	if db, _ := instance.DB(); db != nil {
 		if err := db.Close(); err != nil {
 			fmt.Println("[ERROR] Cannot close mysql connection, err:", err)
 		}

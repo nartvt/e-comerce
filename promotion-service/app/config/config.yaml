@@ -7,5 +7,5 @@ postgres:
   host: 127.0.0.1
   port: 5432
   userName: postgres
-  password: leo123456
-  database: postgres
+  password: root
+  database: health

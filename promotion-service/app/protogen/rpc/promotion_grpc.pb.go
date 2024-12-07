@@ -20,9 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PromotionService_GetPromotionById_FullMethodName = "/promotion.rpc.PromotionService/GetPromotionById"
-	PromotionService_CreatePromotion_FullMethodName  = "/promotion.rpc.PromotionService/CreatePromotion"
-	PromotionService_UpdatePromotion_FullMethodName  = "/promotion.rpc.PromotionService/UpdatePromotion"
+	PromotionService_GetPromotionById_FullMethodName        = "/promotion.rpc.PromotionService/GetPromotionById"
+	PromotionService_CreatePromotion_FullMethodName         = "/promotion.rpc.PromotionService/CreatePromotion"
+	PromotionService_UpdatePromotion_FullMethodName         = "/promotion.rpc.PromotionService/UpdatePromotion"
+	PromotionService_GetPromotionsPagination_FullMethodName = "/promotion.rpc.PromotionService/GetPromotionsPagination"
 )
 
 // PromotionServiceClient is the client API for PromotionService service.
@@ -32,6 +33,7 @@ type PromotionServiceClient interface {
 	GetPromotionById(ctx context.Context, in *message.GetPromotionByIdRequest, opts ...grpc.CallOption) (*message.GetPromotionByIdResponse, error)
 	CreatePromotion(ctx context.Context, in *message.CreatePromotionRequest, opts ...grpc.CallOption) (*message.CreatePromotionResponse, error)
 	UpdatePromotion(ctx context.Context, in *message.UpdatePromotionRequest, opts ...grpc.CallOption) (*message.UpdatePromotionResponse, error)
+	GetPromotionsPagination(ctx context.Context, in *message.GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*message.GetPromotionsPaginationResponse, error)
 }
 
 type promotionServiceClient struct {
@@ -69,6 +71,15 @@ func (c *promotionServiceClient) UpdatePromotion(ctx context.Context, in *messag
 	return out, nil
 }
 
+func (c *promotionServiceClient) GetPromotionsPagination(ctx context.Context, in *message.GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*message.GetPromotionsPaginationResponse, error) {
+	out := new(message.GetPromotionsPaginationResponse)
+	err := c.cc.Invoke(ctx, PromotionService_GetPromotionsPagination_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PromotionServiceServer is the server API for PromotionService service.
 // All implementations must embed UnimplementedPromotionServiceServer
 // for forward compatibility
@@ -76,6 +87,7 @@ type PromotionServiceServer interface {
 	GetPromotionById(context.Context, *message.GetPromotionByIdRequest) (*message.GetPromotionByIdResponse, error)
 	CreatePromotion(context.Context, *message.CreatePromotionRequest) (*message.CreatePromotionResponse, error)
 	UpdatePromotion(context.Context, *message.UpdatePromotionRequest) (*message.UpdatePromotionResponse, error)
+	GetPromotionsPagination(context.Context, *message.GetPromotionsPaginationRequest) (*message.GetPromotionsPaginationResponse, error)
 	mustEmbedUnimplementedPromotionServiceServer()
 }
 
@@ -91,6 +103,9 @@ func (UnimplementedPromotionServiceServer) CreatePromotion(context.Context, *mes
 }
 func (UnimplementedPromotionServiceServer) UpdatePromotion(context.Context, *message.UpdatePromotionRequest) (*message.UpdatePromotionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePromotion not implemented")
+}
+func (UnimplementedPromotionServiceServer) GetPromotionsPagination(context.Context, *message.GetPromotionsPaginationRequest) (*message.GetPromotionsPaginationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPromotionsPagination not implemented")
 }
 func (UnimplementedPromotionServiceServer) mustEmbedUnimplementedPromotionServiceServer() {}
 
@@ -159,6 +174,24 @@ func _PromotionService_UpdatePromotion_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PromotionService_GetPromotionsPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(message.GetPromotionsPaginationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PromotionServiceServer).GetPromotionsPagination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PromotionService_GetPromotionsPagination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PromotionServiceServer).GetPromotionsPagination(ctx, req.(*message.GetPromotionsPaginationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PromotionService_ServiceDesc is the grpc.ServiceDesc for PromotionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -177,6 +210,10 @@ var PromotionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePromotion",
 			Handler:    _PromotionService_UpdatePromotion_Handler,
+		},
+		{
+			MethodName: "GetPromotionsPagination",
+			Handler:    _PromotionService_GetPromotionsPagination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
