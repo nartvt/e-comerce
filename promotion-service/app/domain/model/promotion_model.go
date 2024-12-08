@@ -8,11 +8,11 @@ type Promotion struct {
 	PromotionType          string
 	Value                  int
 	CreatedBy              int
-	CreatedAt              *time.Time
-	UpdatedAt              *time.Time
-	DeletedAt              *time.Time
-	ActiveFrom             *time.Time
-	ActiveTo               *time.Time
+	CreatedAt              time.Time
+	UpdatedAt              time.Time
+	DeletedAt              time.Time
+	ActiveFrom             time.Time
+	ActiveTo               time.Time
 	DailyActiveFrom        int
 	DailyActiveTo          int
 	MaxActiveTime          int

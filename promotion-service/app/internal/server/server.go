@@ -11,10 +11,10 @@ func main() {
 }
 
 func setupInfra() {
-	db.InitPostgres()
+	db.InitDB()
 	grpc.InitGrpcServer()
 }
 
 func closeInfra() {
-	db.ClosePostgres()
+	db.CloseDB()
 }

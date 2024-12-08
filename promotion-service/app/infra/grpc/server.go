@@ -3,13 +3,14 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
 	"promotion-service/app/config"
 	"promotion-service/app/domain/entity"
-	"promotion-service/app/proto-gen/rpc"
+	"promotion-service/app/protogen/rpc"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 func InitGrpcServer() {

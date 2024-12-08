@@ -22,9 +22,10 @@ func (e *StatusError) Error() string {
 func (e *StatusError) String() string {
 	return fmt.Sprintf("Status %d at %s : %s %s %s", e.Status, e.FileLine(), e.Title, e.Message, e.Err)
 }
+
 func (e *StatusError) FileLine() string {
 	parts := strings.Split(e.File, "/")
-	f := strings.Join(parts[len(parts)-4:len(parts)], "/")
+	f := strings.Join(parts[len(parts)-4:], "/")
 	return fmt.Sprintf("%s:%d", f, e.Line)
 }
 
@@ -60,6 +61,7 @@ func ForbiddenError(e error, args ...string) *StatusError {
 	err := Error(e, http.StatusForbidden, "Forbidden Request", "Sorry, you don't have permission to access this.")
 	return err.setupFromArgs(args...)
 }
+
 func Error(e error, s int, t string, m string) *StatusError {
 	// Get runtime info - use zero values if none available
 	err := &StatusError{
