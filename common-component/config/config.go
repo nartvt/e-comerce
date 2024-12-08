@@ -5,13 +5,29 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Server ServerConfig `mapstructure:"server"`
+	Server   ServerConfig   `mapstructure:"server"`
+	Database DatabaseConfig `mapstructure:"database"`
+}
+
+type DatabaseConfig struct {
+	DriverName         string        `mapstructure:"driverName"`
+	Host               string        `mapstructure:"host"`
+	Port               int           `mapstructure:"port"`
+	UserName           string        `mapstructure:"userName"`
+	Password           string        `mapstructure:"password"`
+	DBName             string        `mapstructure:"dbName"`
+	SSLMode            string        `mapstructure:"sslMode"`
+	MaxOpenConnections int           `mapstructure:"maxOpenConnections"`
+	MaxIdleConnections int           `mapstructure:"maxIdleConnections"`
+	MaxConnLifetime    time.Duration `mapstructure:"maxConnLifetime"`
+	MaxConnIdleTime    time.Duration `mapstructure:"maxConnIdleTime"`
 }
 
 type ServerConfig struct {
@@ -66,4 +82,15 @@ func LoadConfig(pathToFile string, env string, config any) error {
 		return fmt.Errorf("unable to decode into struct, %v", err)
 	}
 	return nil
+}
+
+func (r *DatabaseConfig) BuildDatabaseConnectionString() string {
+	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		r.Host, r.Port, r.UserName, r.Password, r.DBName, func() string {
+			if len(r.SSLMode) == 0 {
+				return "disable"
+			}
+			return r.SSLMode
+		}(),
+	)
 }
