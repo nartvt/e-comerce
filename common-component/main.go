@@ -7,9 +7,11 @@ import (
 )
 
 func main() {
-	conf, err := config.LoadConfig("config", "dev")
+	conf := &config.Config{}
+	err := config.LoadConfig("config", "dev", conf)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println(conf.Server.Port)
 }

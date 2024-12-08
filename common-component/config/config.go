@@ -52,7 +52,7 @@ func overrideconfig(v *viper.Viper) {
 	}
 }
 
-func LoadConfig(pathToFile string, env string) (*Config, error) {
+func LoadConfig(pathToFile string, env string, config any) error {
 	configPath := pathToFile + "/" + "application"
 	if len(env) > 0 {
 		configPath = configPath + "-" + env
@@ -62,9 +62,8 @@ func LoadConfig(pathToFile string, env string) (*Config, error) {
 		log.Fatal(err)
 	}
 
-	var config Config
 	if err := v.Unmarshal(&config); err != nil {
-		return nil, fmt.Errorf("unable to decode into struct, %v", err)
+		return fmt.Errorf("unable to decode into struct, %v", err)
 	}
-	return &config, nil
+	return nil
 }
