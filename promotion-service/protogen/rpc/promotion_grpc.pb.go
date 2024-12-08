@@ -11,7 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	message "promotion-service/app/protogen/message"
+	message "promotion-service/protogen/message"
 )
 
 // This is a compile-time assertion to ensure that this generated file

@@ -3,11 +3,11 @@ package entity
 import (
 	"context"
 	"errors"
-	"promotion-service/app/domain/model"
-	"promotion-service/app/protogen/message"
-	"promotion-service/app/protogen/rpc"
-	"promotion-service/app/repository"
-	"promotion-service/app/uerror"
+	"promotion-service/domain/model"
+	"promotion-service/protogen/message"
+	"promotion-service/protogen/rpc"
+	"promotion-service/repository"
+	"promotion-service/uerror"
 	"time"
 
 	"gorm.io/gorm"

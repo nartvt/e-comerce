@@ -10,10 +10,10 @@ var Config config
 
 type config struct {
 	Postgres postgresqlInfo
-	Server   server
+	Server   serverInfo
 }
 
-type server struct {
+type serverInfo struct {
 	Host    string
 	Port    int
 	TimeOut int
@@ -25,6 +25,11 @@ type postgresqlInfo struct {
 	UserName string
 	Password string
 	Database string
+}
+
+type elasticSearchInfo struct {
+	Host string
+	Port int
 }
 
 func init() {

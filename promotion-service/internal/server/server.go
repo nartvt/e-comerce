@@ -1,8 +1,8 @@
 package main
 
 import (
-	"promotion-service/app/infra/db"
-	"promotion-service/app/infra/grpc"
+	"promotion-service/infra/db"
+	"promotion-service/infra/grpc"
 )
 
 func main() {

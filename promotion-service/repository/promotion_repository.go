@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"promotion-service/app/domain/model"
-	"promotion-service/app/infra/db"
+	"promotion-service/domain/model"
+	"promotion-service/infra/db"
 
 	"gorm.io/gorm"
 )

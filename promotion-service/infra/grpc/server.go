@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"promotion-service/app/config"
-	"promotion-service/app/domain/entity"
-	"promotion-service/app/protogen/rpc"
+	"promotion-service/config"
+	"promotion-service/domain/entity"
+	"promotion-service/protogen/rpc"
 	"time"
 
 	"google.golang.org/grpc"
@@ -37,6 +37,7 @@ func InitGrpcServer() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
+
 func interceptor(
 	ctx context.Context,
 	req interface{},

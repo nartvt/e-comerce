@@ -9,7 +9,7 @@ package rpc
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	message "promotion-service/app/protogen/message"
+	message "promotion-service/protogen/message"
 	reflect "reflect"
 )
 

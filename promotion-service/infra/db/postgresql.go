@@ -8,7 +8,7 @@ import (
 
 	"gorm.io/driver/postgres"
 
-	"promotion-service/app/config"
+	"promotion-service/config"
 )
 
 var instance *gorm.DB
