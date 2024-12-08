@@ -1,0 +1,3 @@
+
+
+export GOFLAGS=-mod=vendor

@@ -1,0 +1,11 @@
+vendor/
+
+.env
+
+application-*.yaml
+
+*.exe
+
+go.sum
+
+.git/
