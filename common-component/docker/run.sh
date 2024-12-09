@@ -4,13 +4,13 @@ status=$1
 
 echo $status
 
-docker_compose=docker-compose.yml
+docker_compose=docker-compose.yaml
 
-if [ "$status" = "start" ]; then
-    sudo docker-compose -f $docker_compose  --project-name=init-database up -d --remove-orphans
+if [ "$status" = "up" ]; then
+    sudo docker-compose -f $docker_compose --env-file=.env --project-name=init-database up -d --remove-orphans
 fi
 
-if [ "$status" = "stop" ]; then
-    sudo docker-compose -f $docker_compose down
+if [ "$status" = "down" ]; then
+    sudo docker-compose -f $docker_compose --env-file=.env --project-name=init-database down
 fi
 

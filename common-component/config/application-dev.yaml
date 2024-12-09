@@ -13,3 +13,27 @@ database:
   maxIdleConnections: 10
   maxConnLifetime: 10s
   maxConnIdleTime: 10s
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+  maxIdle: 10
+  dialTimeout: 10s
+  readTimeout: 10s
+  writeTimeout: 10s
+
+elastic:
+  host: localhost
+  port: 9200
+  user: "elastic"
+  password: changeme
+  index: orders
+  maxRetry: 3
+  retryOnStatusCodes:
+    - 429
+    - 500
+    - 502
+    - 503
+    - 504

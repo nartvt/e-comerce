@@ -12,8 +12,14 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig   `mapstructure:"server"`
-	Database DatabaseConfig `mapstructure:"database"`
+	Server   ServerConfig        `mapstructure:"server"`
+	Database DatabaseConfig      `mapstructure:"database"`
+	Redis    RedisConfig         `mapstructure:"redis"`
+	Elastic  ElasticSearchConfig `mapstructure:"elastic"`
+}
+
+type ServerConfig struct {
+	Port string `mapstructure:"port"`
 }
 
 type DatabaseConfig struct {
@@ -30,8 +36,25 @@ type DatabaseConfig struct {
 	MaxConnIdleTime    time.Duration `mapstructure:"maxConnIdleTime"`
 }
 
-type ServerConfig struct {
-	Port string `mapstructure:"port"`
+type RedisConfig struct {
+	Host         string        `mapstructure:"host"`
+	Port         int           `mapstructure:"port"`
+	Password     string        `mapstructure:"password"`
+	DB           int           `mapstructure:"db"`
+	DialTimeout  time.Duration `mapstructure:"dialTimeout"`
+	ReadTimeout  time.Duration `mapstructure:"readTimeout"`
+	WriteTimeout time.Duration `mapstructure:"writeTimeout"`
+	MaxIdle      int           `mapstructure:"maxIdle"`
+}
+
+type ElasticSearchConfig struct {
+	Host               string `mapstructure:"host"`
+	Port               int    `mapstructure:"port"`
+	User               string `mapstructure:"user"`
+	Password           string `mapstructure:"password"`
+	Index              string `mapstructure:"index"`
+	MaxRetry           int    `mapstructure:"maxRetry"`
+	RetryOnStatusCodes []int  `mapstructure:"retryOnStatusCodes"`
 }
 
 func loadConfig(configfile string) (*viper.Viper, error) {
@@ -93,4 +116,14 @@ func (r *DatabaseConfig) BuildDatabaseConnectionString() string {
 			return r.SSLMode
 		}(),
 	)
+}
+
+func (r *RedisConfig) BuildRedisConnectionString() string {
+	return fmt.Sprintf("redis://%s:%s@%s:%d", "", "", r.Host, r.Port)
+}
+
+func (r *ElasticSearchConfig) BuildElasticSearchConnectionString() []string {
+	return []string{
+		fmt.Sprintf("http://%s:%d", r.Host, r.Port),
+	}
 }

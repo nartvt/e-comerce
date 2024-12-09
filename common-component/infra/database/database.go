@@ -6,11 +6,12 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // PostgreSQL driver
+	"github.com/rs/zerolog/log"
 )
 
 func InitDatabaseConnect(conf *config.DatabaseConfig) (*sqlx.DB, error) {
 	sqlConnectUrl := conf.BuildDatabaseConnectionString()
-	fmt.Println(sqlConnectUrl)
+	log.Info().Msgf("connecting to database %s, %s", "url", sqlConnectUrl)
 	db, err := sqlx.Connect(conf.DriverName, sqlConnectUrl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database, %v", err)
