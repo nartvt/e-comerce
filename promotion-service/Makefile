@@ -14,7 +14,7 @@ grpc: grpc_models grpc_rpc grpc_moves
 grpc_moves: grpc_model_move grpc_rpc_move
 
 grpc_models:
-	@echo "Generate proto message: "
+	@echo "Generate protobuf files: "
 	@$(foreach dir,$(PROTOBUF_MESSAGE), \
 	 	protoc --go_out=. --go_opt=paths=source_relative $(dir) && echo "Generate $(dir) ===> success !"; \
 	)

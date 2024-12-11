@@ -1,54 +1,33 @@
-package entity
+package services
 
 import (
 	"context"
 	"errors"
-	"promotion-service/domain/model"
-	"promotion-service/protogen/message"
-	"promotion-service/protogen/rpc"
-	"promotion-service/repository"
-	"promotion-service/uerror"
+	"promotion-service/internal/models"
+	"promotion-service/internal/protobuf"
+	"promotion-service/internal/repository"
+	"promotion-service/internal/uerror"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type promotionEntity struct {
-	rpc.UnimplementedPromotionServiceServer
+type promotionService struct {
+	promotionRepo repository.IPromotionRepository
+	protobuf.UnimplementedPromotionServiceServer
 }
 
-var PromotionEntity rpc.PromotionServiceServer
-
-func init() {
-	PromotionEntity = &promotionEntity{
-		UnimplementedPromotionServiceServer: rpc.UnimplementedPromotionServiceServer{},
-	}
+func NewPromotionService(promotionRepo repository.IPromotionRepository) protobuf.PromotionServiceServer {
+	return promotionService{promotionRepo: promotionRepo}
 }
 
-func (p promotionEntity) GetPromotionById(ctx context.Context, request *message.GetPromotionByIdRequest) (*message.GetPromotionByIdResponse, error) {
-	if request == nil || request.Id <= 0 {
-		err := errors.New("request is empty")
-		return nil, uerror.BadRequestError(err)
-	}
-
-	promotion, err := repository.PromotionRepository.GetPromotionById(int(request.Id))
-	if err != nil && err == gorm.ErrRecordNotFound {
-		return nil, uerror.NotFoundError(err)
-	}
-	if err != nil {
-		return nil, uerror.InternalError(err, err.Error())
-	}
-
-	return &message.GetPromotionByIdResponse{Promotion: toPromotionMessage(promotion)}, nil
-}
-
-func (p promotionEntity) CreatePromotion(ctx context.Context, req *message.CreatePromotionRequest) (*message.CreatePromotionResponse, error) {
+func (p promotionService) CreatePromotion(ctx context.Context, req *protobuf.CreatePromotionRequest) (*protobuf.CreatePromotionResponse, error) {
 	if req == nil {
 		err := errors.New("request is empty")
 		return nil, uerror.BadRequestError(err)
 	}
 
-	modelToBeSaved := &model.Promotion{
+	modelToBeSaved := &models.Promotion{
 		Code:                   req.Code,
 		PromotionType:          req.PromotionType,
 		Value:                  int(req.Value),
@@ -66,21 +45,59 @@ func (p promotionEntity) CreatePromotion(ctx context.Context, req *message.Creat
 		PerUserDailyActiveTime: int(req.PerUserDailyActiveTime),
 		Active:                 req.Active,
 	}
-	err := repository.PromotionRepository.CreatePromotion(modelToBeSaved)
+	err := p.promotionRepo.CreatePromotion(modelToBeSaved)
 	if err != nil {
 		return nil, uerror.InternalError(err)
 	}
 
-	return &message.CreatePromotionResponse{}, nil
+	return &protobuf.CreatePromotionResponse{}, nil
 }
 
-func (p promotionEntity) UpdatePromotion(ctx context.Context, req *message.UpdatePromotionRequest) (*message.UpdatePromotionResponse, error) {
+func (p promotionService) GetPromotionById(ctx context.Context, request *protobuf.GetPromotionByIdRequest) (*protobuf.GetPromotionByIdResponse, error) {
+	if request == nil || request.Id <= 0 {
+		err := errors.New("request is empty")
+		return nil, uerror.BadRequestError(err)
+	}
+
+	promotion, err := p.promotionRepo.GetPromotionById(int(request.Id))
+	if err != nil && err == gorm.ErrRecordNotFound {
+		return nil, uerror.NotFoundError(err)
+	}
+	if err != nil {
+		return nil, uerror.InternalError(err, err.Error())
+	}
+
+	return &protobuf.GetPromotionByIdResponse{Promotion: toPromotionMessage(promotion)}, nil
+}
+
+func (p promotionService) GetPromotionsPagination(ctx context.Context, req *protobuf.GetPromotionsPaginationRequest) (*protobuf.GetPromotionsPaginationResponse, error) {
+	if req == nil {
+		err := errors.New("request is empty")
+		return nil, uerror.BadRequestError(err)
+	}
+
+	if req.Offset < 0 || req.Limit <= 0 {
+		err := errors.New("request param is invalid")
+		return nil, uerror.BadRequestError(err)
+	}
+
+	promotions, err := p.promotionRepo.GetPromotionsPagination(req.IsActive, int(req.Limit), int(req.Offset))
+	if err != nil {
+		return nil, uerror.InternalError(err)
+	}
+
+	return &protobuf.GetPromotionsPaginationResponse{
+		Promotions: toPromotionMessages(promotions),
+	}, nil
+}
+
+func (p promotionService) UpdatePromotion(ctx context.Context, req *protobuf.UpdatePromotionRequest) (*protobuf.UpdatePromotionResponse, error) {
 	if req == nil || req.Id <= 0 {
 		err := errors.New("request is empty")
 		return nil, uerror.BadRequestError(err)
 	}
 
-	err := repository.PromotionRepository.UpdatePromotion(&model.Promotion{
+	err := p.promotionRepo.UpdatePromotion(&models.Promotion{
 		Code:                   req.Code,
 		PromotionType:          req.PromotionType,
 		Value:                  int(req.Value),
@@ -102,32 +119,11 @@ func (p promotionEntity) UpdatePromotion(ctx context.Context, req *message.Updat
 		return nil, uerror.InternalError(err)
 	}
 
-	return &message.UpdatePromotionResponse{}, nil
+	return &protobuf.UpdatePromotionResponse{}, nil
 }
 
-func (p promotionEntity) GetPromotionsPagination(ctx context.Context, req *message.GetPromotionsPaginationRequest) (*message.GetPromotionsPaginationResponse, error) {
-	if req == nil {
-		err := errors.New("request is empty")
-		return nil, uerror.BadRequestError(err)
-	}
-
-	if req.Offset < 0 || req.Limit <= 0 {
-		err := errors.New("request param is invalid")
-		return nil, uerror.BadRequestError(err)
-	}
-
-	promotions, err := repository.PromotionRepository.GetPromotionsPagination(req.IsActive, int(req.Limit), int(req.Offset))
-	if err != nil {
-		return nil, uerror.InternalError(err)
-	}
-
-	return &message.GetPromotionsPaginationResponse{
-		Promotions: toPromotionMessages(promotions),
-	}, nil
-}
-
-func toPromotionMessage(p *model.Promotion) *message.Promotion {
-	return &message.Promotion{
+func toPromotionMessage(p *models.Promotion) *protobuf.Promotion {
+	return &protobuf.Promotion{
 		Id:                     int64(p.Id),
 		Code:                   p.Code,
 		PromotionType:          p.PromotionType,
@@ -148,8 +144,8 @@ func toPromotionMessage(p *model.Promotion) *message.Promotion {
 	}
 }
 
-func toPromotionMessages(models []*model.Promotion) []*message.Promotion {
-	res := make([]*message.Promotion, len(models))
+func toPromotionMessages(models []*models.Promotion) []*protobuf.Promotion {
+	res := make([]*protobuf.Promotion, len(models))
 	for i, m := range models {
 		res[i] = toPromotionMessage(m)
 	}

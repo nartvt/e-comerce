@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package promotion.message;
+package internal.protobuf;
 
-option go_package = "promotion-service/app/protogen/message";
+option go_package = "promotion-service/internal/protobuf";
 
 message Promotion {
   int64   id        = 1;
@@ -86,3 +86,10 @@ message GetPromotionsPaginationRequest {
 message GetPromotionsPaginationResponse {
   repeated Promotion promotions = 1;
 }
+
+service PromotionService {
+    rpc GetPromotionById(GetPromotionByIdRequest) returns (GetPromotionByIdResponse){};
+    rpc CreatePromotion(CreatePromotionRequest) returns (CreatePromotionResponse){};
+    rpc UpdatePromotion(UpdatePromotionRequest) returns (UpdatePromotionResponse){};
+    rpc GetPromotionsPagination(GetPromotionsPaginationRequest) returns (GetPromotionsPaginationResponse){};
+  }

@@ -9,8 +9,9 @@ import (
 var Config config
 
 type config struct {
-	Postgres postgresqlInfo
-	Server   serverInfo
+	Postgres      postgresqlInfo
+	Server        serverInfo
+	ElasticSearch elasticSearchInfo
 }
 
 type serverInfo struct {
@@ -28,8 +29,10 @@ type postgresqlInfo struct {
 }
 
 type elasticSearchInfo struct {
-	Host string
-	Port int
+	Host     string
+	Port     int
+	Username string
+	Password string
 }
 
 func init() {

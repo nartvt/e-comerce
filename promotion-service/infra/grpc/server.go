@@ -6,8 +6,10 @@ import (
 	"log"
 	"net"
 	"promotion-service/config"
-	"promotion-service/domain/entity"
-	"promotion-service/protogen/rpc"
+	"promotion-service/infra/db"
+	"promotion-service/internal/protobuf"
+	"promotion-service/internal/repository"
+	"promotion-service/internal/services"
 	"time"
 
 	"google.golang.org/grpc"
@@ -21,9 +23,8 @@ func InitGrpcServer() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	var (
-		hServer = entity.PromotionEntity
-	)
+	promotionRepo := repository.NewPromotionRepository(db.GetDB())
+	promotionService := services.NewPromotionService(promotionRepo)
 
 	ops := []grpc.ServerOption{
 		grpc.ConnectionTimeout(time.Duration(conf.Server.TimeOut) * time.Second), // set connection timeout
@@ -31,7 +32,7 @@ func InitGrpcServer() {
 	}
 
 	grpcServer := grpc.NewServer(ops...)
-	rpc.RegisterPromotionServiceServer(grpcServer, hServer)
+	protobuf.RegisterPromotionServiceServer(grpcServer, promotionService)
 	log.Printf("Listening on %v", listen.Addr())
 	if err := grpcServer.Serve(listen); err != nil {
 		log.Fatalf("failed to serve: %v", err)
