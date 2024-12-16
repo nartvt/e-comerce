@@ -1,8 +1,9 @@
 package main
 
 import (
-	"promotion-service/app/infra/db"
-	"promotion-service/app/infra/grpc"
+	"promotion-service/infra/db"
+	elasticsearch "promotion-service/infra/elastic-search"
+	"promotion-service/infra/grpc"
 )
 
 func main() {
@@ -12,9 +13,11 @@ func main() {
 
 func setupInfra() {
 	db.InitDB()
+	elasticsearch.InitES()
 	grpc.InitGrpcServer()
 }
 
 func closeInfra() {
 	db.CloseDB()
+	elasticsearch.CloseES()
 }

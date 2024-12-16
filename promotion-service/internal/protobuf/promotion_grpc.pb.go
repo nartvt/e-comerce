@@ -2,16 +2,15 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.12
-// source: app/protobuf/rpc/promotion.proto
+// source: promotion.proto
 
-package rpc
+package protobuf
 
 import (
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	message "promotion-service/app/protogen/message"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PromotionService_GetPromotionById_FullMethodName        = "/promotion.rpc.PromotionService/GetPromotionById"
-	PromotionService_CreatePromotion_FullMethodName         = "/promotion.rpc.PromotionService/CreatePromotion"
-	PromotionService_UpdatePromotion_FullMethodName         = "/promotion.rpc.PromotionService/UpdatePromotion"
-	PromotionService_GetPromotionsPagination_FullMethodName = "/promotion.rpc.PromotionService/GetPromotionsPagination"
+	PromotionService_GetPromotionById_FullMethodName        = "/internal.protobuf.PromotionService/GetPromotionById"
+	PromotionService_CreatePromotion_FullMethodName         = "/internal.protobuf.PromotionService/CreatePromotion"
+	PromotionService_UpdatePromotion_FullMethodName         = "/internal.protobuf.PromotionService/UpdatePromotion"
+	PromotionService_GetPromotionsPagination_FullMethodName = "/internal.protobuf.PromotionService/GetPromotionsPagination"
 )
 
 // PromotionServiceClient is the client API for PromotionService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PromotionServiceClient interface {
-	GetPromotionById(ctx context.Context, in *message.GetPromotionByIdRequest, opts ...grpc.CallOption) (*message.GetPromotionByIdResponse, error)
-	CreatePromotion(ctx context.Context, in *message.CreatePromotionRequest, opts ...grpc.CallOption) (*message.CreatePromotionResponse, error)
-	UpdatePromotion(ctx context.Context, in *message.UpdatePromotionRequest, opts ...grpc.CallOption) (*message.UpdatePromotionResponse, error)
-	GetPromotionsPagination(ctx context.Context, in *message.GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*message.GetPromotionsPaginationResponse, error)
+	GetPromotionById(ctx context.Context, in *GetPromotionByIdRequest, opts ...grpc.CallOption) (*GetPromotionByIdResponse, error)
+	CreatePromotion(ctx context.Context, in *CreatePromotionRequest, opts ...grpc.CallOption) (*CreatePromotionResponse, error)
+	UpdatePromotion(ctx context.Context, in *UpdatePromotionRequest, opts ...grpc.CallOption) (*UpdatePromotionResponse, error)
+	GetPromotionsPagination(ctx context.Context, in *GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*GetPromotionsPaginationResponse, error)
 }
 
 type promotionServiceClient struct {
@@ -44,8 +43,8 @@ func NewPromotionServiceClient(cc grpc.ClientConnInterface) PromotionServiceClie
 	return &promotionServiceClient{cc}
 }
 
-func (c *promotionServiceClient) GetPromotionById(ctx context.Context, in *message.GetPromotionByIdRequest, opts ...grpc.CallOption) (*message.GetPromotionByIdResponse, error) {
-	out := new(message.GetPromotionByIdResponse)
+func (c *promotionServiceClient) GetPromotionById(ctx context.Context, in *GetPromotionByIdRequest, opts ...grpc.CallOption) (*GetPromotionByIdResponse, error) {
+	out := new(GetPromotionByIdResponse)
 	err := c.cc.Invoke(ctx, PromotionService_GetPromotionById_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,8 +52,8 @@ func (c *promotionServiceClient) GetPromotionById(ctx context.Context, in *messa
 	return out, nil
 }
 
-func (c *promotionServiceClient) CreatePromotion(ctx context.Context, in *message.CreatePromotionRequest, opts ...grpc.CallOption) (*message.CreatePromotionResponse, error) {
-	out := new(message.CreatePromotionResponse)
+func (c *promotionServiceClient) CreatePromotion(ctx context.Context, in *CreatePromotionRequest, opts ...grpc.CallOption) (*CreatePromotionResponse, error) {
+	out := new(CreatePromotionResponse)
 	err := c.cc.Invoke(ctx, PromotionService_CreatePromotion_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,8 +61,8 @@ func (c *promotionServiceClient) CreatePromotion(ctx context.Context, in *messag
 	return out, nil
 }
 
-func (c *promotionServiceClient) UpdatePromotion(ctx context.Context, in *message.UpdatePromotionRequest, opts ...grpc.CallOption) (*message.UpdatePromotionResponse, error) {
-	out := new(message.UpdatePromotionResponse)
+func (c *promotionServiceClient) UpdatePromotion(ctx context.Context, in *UpdatePromotionRequest, opts ...grpc.CallOption) (*UpdatePromotionResponse, error) {
+	out := new(UpdatePromotionResponse)
 	err := c.cc.Invoke(ctx, PromotionService_UpdatePromotion_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -71,8 +70,8 @@ func (c *promotionServiceClient) UpdatePromotion(ctx context.Context, in *messag
 	return out, nil
 }
 
-func (c *promotionServiceClient) GetPromotionsPagination(ctx context.Context, in *message.GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*message.GetPromotionsPaginationResponse, error) {
-	out := new(message.GetPromotionsPaginationResponse)
+func (c *promotionServiceClient) GetPromotionsPagination(ctx context.Context, in *GetPromotionsPaginationRequest, opts ...grpc.CallOption) (*GetPromotionsPaginationResponse, error) {
+	out := new(GetPromotionsPaginationResponse)
 	err := c.cc.Invoke(ctx, PromotionService_GetPromotionsPagination_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -84,10 +83,10 @@ func (c *promotionServiceClient) GetPromotionsPagination(ctx context.Context, in
 // All implementations must embed UnimplementedPromotionServiceServer
 // for forward compatibility
 type PromotionServiceServer interface {
-	GetPromotionById(context.Context, *message.GetPromotionByIdRequest) (*message.GetPromotionByIdResponse, error)
-	CreatePromotion(context.Context, *message.CreatePromotionRequest) (*message.CreatePromotionResponse, error)
-	UpdatePromotion(context.Context, *message.UpdatePromotionRequest) (*message.UpdatePromotionResponse, error)
-	GetPromotionsPagination(context.Context, *message.GetPromotionsPaginationRequest) (*message.GetPromotionsPaginationResponse, error)
+	GetPromotionById(context.Context, *GetPromotionByIdRequest) (*GetPromotionByIdResponse, error)
+	CreatePromotion(context.Context, *CreatePromotionRequest) (*CreatePromotionResponse, error)
+	UpdatePromotion(context.Context, *UpdatePromotionRequest) (*UpdatePromotionResponse, error)
+	GetPromotionsPagination(context.Context, *GetPromotionsPaginationRequest) (*GetPromotionsPaginationResponse, error)
 	mustEmbedUnimplementedPromotionServiceServer()
 }
 
@@ -95,16 +94,16 @@ type PromotionServiceServer interface {
 type UnimplementedPromotionServiceServer struct {
 }
 
-func (UnimplementedPromotionServiceServer) GetPromotionById(context.Context, *message.GetPromotionByIdRequest) (*message.GetPromotionByIdResponse, error) {
+func (UnimplementedPromotionServiceServer) GetPromotionById(context.Context, *GetPromotionByIdRequest) (*GetPromotionByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPromotionById not implemented")
 }
-func (UnimplementedPromotionServiceServer) CreatePromotion(context.Context, *message.CreatePromotionRequest) (*message.CreatePromotionResponse, error) {
+func (UnimplementedPromotionServiceServer) CreatePromotion(context.Context, *CreatePromotionRequest) (*CreatePromotionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePromotion not implemented")
 }
-func (UnimplementedPromotionServiceServer) UpdatePromotion(context.Context, *message.UpdatePromotionRequest) (*message.UpdatePromotionResponse, error) {
+func (UnimplementedPromotionServiceServer) UpdatePromotion(context.Context, *UpdatePromotionRequest) (*UpdatePromotionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePromotion not implemented")
 }
-func (UnimplementedPromotionServiceServer) GetPromotionsPagination(context.Context, *message.GetPromotionsPaginationRequest) (*message.GetPromotionsPaginationResponse, error) {
+func (UnimplementedPromotionServiceServer) GetPromotionsPagination(context.Context, *GetPromotionsPaginationRequest) (*GetPromotionsPaginationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPromotionsPagination not implemented")
 }
 func (UnimplementedPromotionServiceServer) mustEmbedUnimplementedPromotionServiceServer() {}
@@ -121,7 +120,7 @@ func RegisterPromotionServiceServer(s grpc.ServiceRegistrar, srv PromotionServic
 }
 
 func _PromotionService_GetPromotionById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(message.GetPromotionByIdRequest)
+	in := new(GetPromotionByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -133,13 +132,13 @@ func _PromotionService_GetPromotionById_Handler(srv interface{}, ctx context.Con
 		FullMethod: PromotionService_GetPromotionById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PromotionServiceServer).GetPromotionById(ctx, req.(*message.GetPromotionByIdRequest))
+		return srv.(PromotionServiceServer).GetPromotionById(ctx, req.(*GetPromotionByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PromotionService_CreatePromotion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(message.CreatePromotionRequest)
+	in := new(CreatePromotionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -151,13 +150,13 @@ func _PromotionService_CreatePromotion_Handler(srv interface{}, ctx context.Cont
 		FullMethod: PromotionService_CreatePromotion_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PromotionServiceServer).CreatePromotion(ctx, req.(*message.CreatePromotionRequest))
+		return srv.(PromotionServiceServer).CreatePromotion(ctx, req.(*CreatePromotionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PromotionService_UpdatePromotion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(message.UpdatePromotionRequest)
+	in := new(UpdatePromotionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -169,13 +168,13 @@ func _PromotionService_UpdatePromotion_Handler(srv interface{}, ctx context.Cont
 		FullMethod: PromotionService_UpdatePromotion_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PromotionServiceServer).UpdatePromotion(ctx, req.(*message.UpdatePromotionRequest))
+		return srv.(PromotionServiceServer).UpdatePromotion(ctx, req.(*UpdatePromotionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PromotionService_GetPromotionsPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(message.GetPromotionsPaginationRequest)
+	in := new(GetPromotionsPaginationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -187,7 +186,7 @@ func _PromotionService_GetPromotionsPagination_Handler(srv interface{}, ctx cont
 		FullMethod: PromotionService_GetPromotionsPagination_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PromotionServiceServer).GetPromotionsPagination(ctx, req.(*message.GetPromotionsPaginationRequest))
+		return srv.(PromotionServiceServer).GetPromotionsPagination(ctx, req.(*GetPromotionsPaginationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -196,7 +195,7 @@ func _PromotionService_GetPromotionsPagination_Handler(srv interface{}, ctx cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PromotionService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "promotion.rpc.PromotionService",
+	ServiceName: "internal.protobuf.PromotionService",
 	HandlerType: (*PromotionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -217,5 +216,5 @@ var PromotionService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "app/protobuf/rpc/promotion.proto",
+	Metadata: "promotion.proto",
 }

@@ -9,11 +9,12 @@ import (
 var Config config
 
 type config struct {
-	Postgres postgresqlInfo
-	Server   server
+	Postgres      postgresqlInfo
+	Server        serverInfo
+	ElasticSearch elasticSearchInfo
 }
 
-type server struct {
+type serverInfo struct {
 	Host    string
 	Port    int
 	TimeOut int
@@ -27,6 +28,13 @@ type postgresqlInfo struct {
 	Database string
 }
 
+type elasticSearchInfo struct {
+	Host     string
+	Port     int
+	Username string
+	Password string
+}
+
 func init() {
 	load()
 }
@@ -35,11 +43,11 @@ func load() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath("app/config")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Panic("Config can't read")
+		log.Panic("Config can't be read")
 		return
 	}
 	if err := viper.Unmarshal(&Config); err != nil {
-		log.Panic("Config can't load")
+		log.Panic("Config can't be load")
 		return
 	}
 	log.Println(Config)
