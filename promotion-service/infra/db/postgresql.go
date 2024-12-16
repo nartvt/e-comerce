@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"sync"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -11,7 +12,10 @@ import (
 	"promotion-service/config"
 )
 
-var instance *gorm.DB
+var (
+	dbInstance *gorm.DB
+	once       sync.Once
+)
 
 func InitDB() {
 	conf := config.Config
@@ -24,7 +28,7 @@ func InitDB() {
 	)
 
 	var err error
-	instance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+	dbInstance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
@@ -33,14 +37,16 @@ func InitDB() {
 }
 
 func GetDB() *gorm.DB {
-	if instance == nil {
-		InitDB()
-	}
-	return instance
+	once.Do(func() {
+		if dbInstance == nil {
+			InitDB()
+		}
+	})
+	return dbInstance
 }
 
 func CloseDB() {
-	if db, _ := instance.DB(); db != nil {
+	if db, _ := dbInstance.DB(); db != nil {
 		if err := db.Close(); err != nil {
 			fmt.Println("[ERROR] Cannot close mysql connection, err:", err)
 		}

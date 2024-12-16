@@ -43,11 +43,11 @@ func load() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath("app/config")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Panic("Config can't read")
+		log.Panic("Config can't be read")
 		return
 	}
 	if err := viper.Unmarshal(&Config); err != nil {
-		log.Panic("Config can't load")
+		log.Panic("Config can't be load")
 		return
 	}
 	log.Println(Config)

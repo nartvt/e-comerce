@@ -2,11 +2,15 @@ package elasticsearch
 
 import (
 	"log"
+	"sync"
 
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
-var esClient *elasticsearch.Client
+var (
+	esClient *elasticsearch.Client
+	once     sync.Once
+)
 
 func InitES() {
 	var (
@@ -21,10 +25,11 @@ func InitES() {
 }
 
 func GetES() *elasticsearch.Client {
-	if esClient == nil {
-		InitES()
-	}
-
+	once.Do(func() {
+		if esClient == nil {
+			InitES()
+		}
+	})
 	return esClient
 }
 
