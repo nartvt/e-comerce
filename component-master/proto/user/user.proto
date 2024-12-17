@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package user;
+option go_package ="proto/user";
+
+enum UserStatus {
+  REGISTERED = 0;
+  ACTIVE     = 1;
+  INACTIVE   = 2;
+  BLOCKED    = 3;
+}
+
+message User {
+  string userName = 1;
+  string email = 2;
+  string password = 3;
+  string role = 4;
+}
+
+message CreateUserResponse {
+  int64 code      = 1;
+  string message  = 2;
+  UserResponseData data = 3;
+}
+
+message UserResponseData {
+  string userName     = 1;
+  string email        = 2;
+  int64 registeredAt  = 3;
+  int64 createdAt     = 4;
+  int64 updatedAt     = 5;
+  UserStatus status   = 6;
+}
+
+
+message CreateUserRequest {
+  string userName    = 1;
+  string email       = 2;
+  string phone       = 3;
+  string password    = 4;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message GetUserByEmailResponse {
+  int64 code            = 1;
+  string message        = 2;
+  UserResponseData data = 3;
+}
+
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse) {}
+}

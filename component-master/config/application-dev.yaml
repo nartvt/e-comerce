@@ -1,0 +1,73 @@
+server:
+  http:
+    port: 8081
+    enableTLS: false
+    correctTimeOut: 30000
+  grpc:
+    port: 9081
+    enableTLS: false
+    correctTimeOut: 30000
+
+database:
+  driverName: postgres
+  host: localhost
+  port: 5432
+  userName: postgres
+  password: root
+  dbName: orders
+  sslMode: disable
+  maxOpenConnections: 10
+  maxIdleConnections: 10
+  maxConnLifetime: 10s
+  maxConnIdleTime: 10s
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+  maxIdle: 10
+  dialTimeout: 10s
+  readTimeout: 10s
+  writeTimeout: 10s
+
+elastic:
+  host: localhost
+  port: 9200
+  user: "elastic"
+  password: "elastic"
+  index: orders
+  maxRetry: 3
+  retryOnStatusCodes:
+    - 429
+    - 500
+    - 502
+    - 503
+    - 504
+
+log:
+  env: dev
+  level: -4
+  jsonOutput: false
+  addSource: true
+
+middleware:
+  basicAuth:
+    username: admin
+    password: admin
+  casbin:
+    modelPath: casbin/model.conf
+    policyPath: casbin/policy.csv
+  token:
+    accessTokenSecret: secret
+    accessTokenExp: 10m # 10 minutes
+    refresTokenSecret: refreshSecret
+    refreshTokenExp: 24h # 24 hours
+  static:
+    unauthorized: page/unauthorized.html
+
+grpcPromotion:
+  host: localhost
+  port: 8081
+  readTimeOut: 10000
+  writeTimeOut: 10000

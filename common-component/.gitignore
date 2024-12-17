@@ -1,9 +1,0 @@
-vendor/
-
-.env
-
-*.exe
-
-go.sum
-
-.git/

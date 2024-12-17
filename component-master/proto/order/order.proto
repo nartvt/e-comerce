@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package order;
+option go_package ="proto/order";
+
+enum OrderStatus {
+  PROCESSING = 0;
+  CANCELLED  = 1;
+  SUCCESS    = 2;
+  FAILURE    = 3;
+}
+
+message CreateOrderRequest {
+  repeated OrderData orders = 1;
+  string encryptData        = 2;
+}
+
+message OrderData {
+  string productId          = 1;
+  int32 quantity            = 2;
+  float price               = 3;
+  PromotionData promotion = 4;
+}
+
+
+message PromotionData {
+  string promotionCode = 1;
+  float discountValue  = 2;
+}
+
+message CreateOrderResponse {
+  int64 code                    = 1;
+  string message                = 2;
+  CreateOrderData data  = 3;
+}
+
+message CreateOrderData {
+  string orderCode = 1;
+  int64 quantity   = 2;
+  float price      = 3;
+  OrderStatus status = 4;
+
+}
+
+message GetOrderByOrderCodeResponse {
+  int64 code                    = 1;
+  string message                = 2;
+  GetOrderByOrderCodeData data  = 3;
+}
+
+message GetOrderByOrderCodeRequest {
+    string orderCode = 1;
+}
+
+message GetOrderByOrderCodeData {
+  string orderCode    = 1;
+  int64 quantity      = 2;
+  float price         = 3;
+  OrderStatus status  = 4;
+  int64 createdAt    = 5;
+  int64 updatedAt    = 6;
+  PromotionData promotion = 7;
+}
+
+
+service OrderService {
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {}
+  rpc GetOrderByOrderCode(GetOrderByOrderCodeRequest) returns (GetOrderByOrderCodeResponse) {}
+}
